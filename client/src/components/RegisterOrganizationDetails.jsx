@@ -1,5 +1,11 @@
+import { useContext } from "react";
+import { RegisterOrganizationContext } from "../contexts/RegisterOrganization";
+
 const RegisterOrganizationDetails = () => {
-  return (
+
+    const {orgName, orgEmail, orgAddress, setOrgName, setOrgEmail, setOrgAddress} = useContext(RegisterOrganizationContext)
+  
+    return (
     <div className="bg-white p-8 border border-black max-w-xl mx-auto my-20">
       <div className="mb-6">
         <label className="block text-base font-medium mb-2">
@@ -7,7 +13,7 @@ const RegisterOrganizationDetails = () => {
         </label>
         <input
           className="w-full border border-black px-3 py-2"
-          type="text"
+          type="text" value={orgName} onChange={(e) => setOrgName(e.target.value)}
           placeholder="Wellfound"
         />
       </div>
@@ -17,7 +23,7 @@ const RegisterOrganizationDetails = () => {
         </label>
         <input
           className="w-full border border-black px-3 py-2"
-          type="email"
+          type="email" value={orgEmail} onChange={(e) => setOrgEmail(e.target.value)}
           placeholder="info@wellfound.com"
         />
       </div>
@@ -29,7 +35,8 @@ const RegisterOrganizationDetails = () => {
         </label>
         <textarea
           className="w-full border border-black px-3 py-2"
-          id="org-address"
+          value={orgAddress}
+          onChange={(e) => setOrgAddress(e.target.value)}
           rows="4"
         ></textarea>
       </div>
