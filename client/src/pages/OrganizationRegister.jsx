@@ -1,8 +1,14 @@
+import RegisterOrganizationContextProvider from "../contexts/RegisterOrganization";
+import RegisterOrganizationDetails from "../components/RegisterOrganizationDetails";
+
+import { RegisterOrganizationContext } from "../contexts/RegisterOrganization";
 
 const OrganizationRegister = () => {
     return ( 
         <>
-            <h2>Register your organization</h2>
+            <RegisterOrganizationContextProvider>
+                <RegisterOrganizationDetails />
+            </RegisterOrganizationContextProvider>
         </>
      );
 }
