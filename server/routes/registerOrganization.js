@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const Joi = require("joi")
 
 const Organization = require("../models/organization")
 
@@ -39,15 +40,23 @@ router.get("/", async (req, res) => {
 
         const {email} = req.query
 
+        const validEmailSchema = Joi.string().email()
+        
+        await validEmailSchema.validateAsync(email)
+
         const result = await Organization.findOne({
             orgEmail: email
         }).select({password: 0})
 
-        console.log(results)
 
         res.status(200).json({data: result})
 
     } catch(err) {
+
+        if(err.message.includes("email")) {
+            return res.status(401).json({message: "Email invalid"})
+        }
+
         res.status(500).json({error: err})
     }
 })
