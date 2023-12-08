@@ -15,13 +15,13 @@ export const registerOrganization = async function (orgBody) {
             data: JSON.stringify(orgBody)
         }
 
-        const {data} = await axios(request)
+        const {data, status} = await axios(request)
 
-        return {responseMessage: data.message}
+        return {data, status}
 
     } catch(error) {
 
-        console.log(error.response.message)
+        console.log(`Error: `, error.response.data)
         
         const {data, status} = error.response
 

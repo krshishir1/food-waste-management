@@ -17,7 +17,9 @@ const RegisterOrganizationContextProvider = ({children}) => {
             orgName, orgEmail,orgAddress, password
         }
 
-        await registerOrganization(orgBody)
+        const {data, status} = await registerOrganization(orgBody)
+
+        return {data, status}
     }
 
     const value = {orgName, orgEmail, orgAddress, setOrgName, setOrgEmail, setOrgAddress, password, setPassword, registerNewOrganization}

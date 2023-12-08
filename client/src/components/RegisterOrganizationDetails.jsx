@@ -11,20 +11,60 @@ const RegisterOrganizationDetails = () => {
     setOrgAddress,
     password,
     setPassword,
-    registerNewOrganization
+    registerNewOrganization,
   } = useContext(RegisterOrganizationContext);
 
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState([]);
+  const [responseMessage, setResponseMessage] = useState("");
 
-  const submitForm = (e) => {
-    e.preventDefault()
+  const submitForm = async (e) => {
+    e.preventDefault();
 
-    registerNewOrganization()
-  }
+    const { data, status } = await registerNewOrganization();
+
+    console.log(data, status)
+
+    if (status === 400) {
+      setErrors(data.errors);
+      setResponseMessage("")
+    } 
+    
+    else if (status === 401) {
+      setErrors([]);
+      setResponseMessage(data.message)
+    } 
+    
+    else if (status === 201) {
+      setErrors([]);
+      setResponseMessage(data.message)
+    }
+
+  };
+
+  const DisplayErrors = () => (
+    <div className="bg-red-200 rounded p-4 mb-6">
+      <h3 className="text-sm text-red-700 font-bold mb-2">Errors</h3>
+      <ul>
+        {errors.map((error, i) => (
+          <li key={`err-${i}`} className="text-xs text-red-700">
+            {i + 1}) {error.message}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  const DisplaySuccess = () => (
+    <div className="bg-green-200 rounded p-4 mb-6">
+      <h3 className="text-sm font-bold mb-2">{responseMessage}</h3>
+    </div>
+  );
 
   return (
     <div className="bg-white p-8 border border-black max-w-xl mx-auto my-20">
       <form onSubmit={submitForm}>
+        {errors.length > 0 && <DisplayErrors />}
+        {responseMessage && <DisplaySuccess />}
         <div className="mb-6">
           <label className="block text-base font-medium mb-2">
             Organization Name
@@ -73,8 +113,10 @@ const RegisterOrganizationDetails = () => {
           />
         </div>
 
-        <button type="submit"
-         className="bg-[#007fff] text-white text-xl font-bold rounded-lg py-2 px-16">
+        <button
+          type="submit"
+          className="bg-[#007fff] text-white text-xl font-bold rounded-lg py-2 px-16"
+        >
           Next
         </button>
       </form>
