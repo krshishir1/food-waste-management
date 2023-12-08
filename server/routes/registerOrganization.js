@@ -3,6 +3,7 @@ const router = express.Router()
 
 const Organization = require("../models/organization")
 
+// Register new organization
 router.post("/register", async (req, res) => {
     try {
         const {orgName} = req.body
@@ -30,6 +31,24 @@ router.post("/register", async (req, res) => {
         }
 
         res.status(500).json({message: err.message})
+    }
+})
+
+router.get("/", async (req, res) => {
+    try {
+
+        const {email} = req.query
+
+        const result = await Organization.findOne({
+            orgEmail: email
+        }).select({password: 0})
+
+        console.log(results)
+
+        res.status(200).json({data: result})
+
+    } catch(err) {
+        res.status(500).json({error: err})
     }
 })
 
