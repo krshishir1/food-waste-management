@@ -9,13 +9,22 @@ const RegisterOrganizationDetails = () => {
     setOrgName,
     setOrgEmail,
     setOrgAddress,
+    password,
+    setPassword,
+    registerNewOrganization
   } = useContext(RegisterOrganizationContext);
 
   const [errors, setErrors] = useState([])
 
+  const submitForm = (e) => {
+    e.preventDefault()
+
+    registerNewOrganization()
+  }
+
   return (
     <div className="bg-white p-8 border border-black max-w-xl mx-auto my-20">
-      <form>
+      <form onSubmit={submitForm}>
         <div className="mb-6">
           <label className="block text-base font-medium mb-2">
             Organization Name
@@ -51,7 +60,21 @@ const RegisterOrganizationDetails = () => {
             rows="4"
           ></textarea>
         </div>
-        <button className="bg-[#007fff] text-white text-xl font-bold rounded-lg py-2 px-16">
+
+        <div className="mb-6">
+          <label className="block text-base font-medium mb-2">
+            Set up password
+          </label>
+          <input
+            className="w-full border border-black px-3 py-2"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button type="submit"
+         className="bg-[#007fff] text-white text-xl font-bold rounded-lg py-2 px-16">
           Next
         </button>
       </form>

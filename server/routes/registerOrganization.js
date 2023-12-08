@@ -35,6 +35,7 @@ router.post("/register", async (req, res) => {
     }
 })
 
+// Getting organization by email
 router.get("/", async (req, res) => {
     try {
 
@@ -60,5 +61,9 @@ router.get("/", async (req, res) => {
         res.status(500).json({error: err})
     }
 })
+
+
+
+
 
 module.exports = router
