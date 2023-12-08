@@ -3,7 +3,11 @@ const app = express()
 const mongoose = require("mongoose")
 require("dotenv").config()
 
+const cors = require("cors")
+
 const organizationRouter = require("./routes/registerOrganization")
+
+app.use(cors())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
