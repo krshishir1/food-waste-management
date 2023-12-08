@@ -9,6 +9,11 @@ const RegisterOrganizationContextProvider = ({children}) => {
     const [orgEmail, setOrgEmail] = useState("");
     const [orgAddress, setOrgAddress] = useState("")
 
+    const registerNewOrganization = function () {
+        const errors = []
+
+    }
+
     const value = {orgName, orgEmail, orgAddress, setOrgName, setOrgEmail, setOrgAddress}
 
     return ( 
