@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const validator = require("validator")
+const bcrypt = require("bcryptjs")
 
 const organizationSchema = new Schema({
     orgName: {
@@ -28,9 +29,17 @@ const organizationSchema = new Schema({
     }
 })
 
-// organizationSchema.pre("save", function(next) {
-//     console.log(this.password)
-// })
+organizationSchema.pre("save", async function(next) {
+    
+    try {
+        const hashedPassword = await bcrypt.hash(this.password, Number(process.env.SALT_ROUNDS))
+        this.password = hashedPassword
+    } catch(err) {
+        console.log(err.message)
+    }
+
+    next()
+})
 
 const Organization = mongoose.model("Organization", organizationSchema)
 module.exports = Organization
