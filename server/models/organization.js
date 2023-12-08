@@ -28,9 +28,9 @@ const organizationSchema = new Schema({
     }
 })
 
-organizationSchema.pre("save", function(next) {
-    console.log(this.password)
-})
+// organizationSchema.pre("save", function(next) {
+//     console.log(this.password)
+// })
 
 const Organization = mongoose.model("Organization", organizationSchema)
 module.exports = Organization

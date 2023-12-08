@@ -5,9 +5,6 @@ const Organization = require("../models/organization")
 
 router.post("/register", async (req, res) => {
     try {
-
-        console.log("Hello")
-
         const {orgName} = req.body
 
         const organization = new Organization(req.body)
