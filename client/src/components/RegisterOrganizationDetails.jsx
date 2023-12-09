@@ -1,4 +1,7 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 import { RegisterOrganizationContext } from "../contexts/RegisterOrganization";
 
 const RegisterOrganizationDetails = () => {
@@ -16,6 +19,7 @@ const RegisterOrganizationDetails = () => {
 
   const [errors, setErrors] = useState([]);
   const [responseMessage, setResponseMessage] = useState("");
+  const navigate = useNavigate();
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -37,6 +41,7 @@ const RegisterOrganizationDetails = () => {
     else if (status === 201) {
       setErrors([]);
       setResponseMessage(data.message)
+      navigate("/")
     }
 
   };
