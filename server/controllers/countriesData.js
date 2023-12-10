@@ -1,26 +1,49 @@
 const axios = require("axios")
 const Country = require('country-state-city').Country;
+const State = require('country-state-city').State;
 
-const countriesUrl = `https://countriesnow.space/api/v0.1/countries`
+// Api not working
+// const countriesUrl = `https://countriesnow.space/api/v0.1/countries`
 
-const axiosInstance = axios.create({
-    baseURL: countriesUrl,
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+// axios not used
+// const axiosInstance = axios.create({
+//     baseURL: countriesUrl,
+//     headers: {
+//         "Content-Type": "application/json"
+//     }
+// })
 
 const getCountriesAndStates = async () => {
     try {
 
-        const {data} = Country.getAllCountries
+        const countriesArr = await Country.getAllCountries().map((el) => {
+            return {
+                name: el.name,
+                isocode: el.isoCode,
+                phonecode: el.phonecode,
+                latitude: el.latitude,
+                longitude: el.longitude,
+            }
+        })
 
-        return Array.isArray(data.data) ? data.data : null
+        countriesArr.forEach(async (country, i) => {
+            const statesArr = []
+            await State.getStatesOfCountry(country.isocode).forEach((state) => {
+                // console.log(state)
+                const {name, isoCode, latitude, longitude} = state
+                const statesObj = {name, isoCode, latitude, longitude}
+                statesArr.push(statesObj)
+            })
+            countriesArr[i].states = statesArr
+        })
+
+        return countriesArr
+
 
     } catch(err) {
         console.log(err.message)
 
-        return false
+        return null
     }
 }
 
@@ -46,5 +69,5 @@ const getCitiesByStates = async (query1) => {
 
 module.exports = {
     getCountriesAndStates,
-    getCitiesByStates
+    // getCitiesByStates
 }
