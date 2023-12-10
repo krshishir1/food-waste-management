@@ -81,7 +81,8 @@ const getLocalRestaurants = async (query) => {
             lat: Joi.number().required(),
             lon: Joi.number().required(),
             limit: Joi.number().optional().max(100),
-            ofs: Joi.number().optional().max(500)
+            ofs: Joi.number().optional().max(500),
+            radius: Joi.number().optional().max(100000)
         })
 
         const {error} = schema.validate(query)
@@ -100,7 +101,7 @@ const getLocalRestaurants = async (query) => {
                 categorySet: "7315",
                 ofs: query.ofs || 0,
                 limit: query.limit || 100,
-                radius: 10000,
+                radius: query.radius || 10000,
             }
         }
 
@@ -120,7 +121,7 @@ const getLocalRestaurants = async (query) => {
             restaurantList.push({type, score, dist, position, address, poi})
         })
 
-        return {status: 200, results: restaurantList}
+        return {status: 200, data: {results: restaurantList, summary: data.summary}}
 
     } catch(err) {
         console.log(err.message)
