@@ -40,13 +40,13 @@ const getCountriesAndStates = async () => {
             countriesArr[i].states = statesArr
         })
 
-        return countriesArr
+        return {status: 200, results: countriesArr}
 
 
     } catch(err) {
         console.log(err.message)
 
-        return null
+        return {status: 500, errMsg: err.message}
     }
 }
 
@@ -61,16 +61,16 @@ const getCitiesByStates = async (query) => {
         const {error} = schema.validate(query)
 
         const isValid = (error === undefined || null)
-        if(!isValid) return false
+        if(!isValid) throw new Error(error.message)
 
-        const cityArr = City.getCitiesOfState(query.countryCode, query.stateCode)
+        const cityArr = await City.getCitiesOfState(query.countryCode, query.stateCode)
 
-        return cityArr.length ? cityArr : false
+        return {status: 200, results: cityArr}
 
     } catch(err) {
-        console.log(err)
+        console.log(err.message)
 
-        return false
+        return {status: 500, errMsg: err.message}
     }
 }
 

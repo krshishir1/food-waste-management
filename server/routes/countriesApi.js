@@ -7,27 +7,26 @@ const Joi = require("joi")
 router.get("/countries", async (req, res) => {
     try {
 
-        const data = await countriesApi.getCountriesAndStates()
+        const {status, errMsg, results} = await countriesApi.getCountriesAndStates()
 
-        if(!data) return res.status(404).json({message: "No data found"})
+        if(errMsg) throw new Error(errMsg)
 
-        res.status(200).json({data})
+        res.status(status).json({results})
 
     } catch(err) {
         
-        res.status(500).json({message: err.message})
+        res.status(500).json({errMsg: err.message})
     }
 })
 
 router.get("/cities", async (req, res) => {
     try {
-        const data = await countriesApi.getCitiesByStates(req.query)
+        const {status, results, errMsg} = await countriesApi.getCitiesByStates(req.query)
+        if(errMsg) throw new Error(errMsg)
 
-        if(!data) return res.status(404).json({message: "No cities found"})
-
-        res.status(200).json({data})
+        res.status(status).json({results})
     } catch(err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({errMsg: err.message})
     }
 })
 
