@@ -1,9 +1,16 @@
 const axios = require("axios")
 const Country = require('country-state-city').Country;
 const State = require('country-state-city').State;
+const City = require('country-state-city').City;
+
+const Joi = require("joi")
 
 // Api not working
 // const countriesUrl = `https://countriesnow.space/api/v0.1/countries`
+
+// const restaurantInstance = axios.create({
+//     baseURL: ``
+// })
 
 // axios not used
 // const axiosInstance = axios.create({
@@ -47,18 +54,22 @@ const getCountriesAndStates = async () => {
     }
 }
 
-const getCitiesByStates = async (query1) => {
+const getCitiesByStates = async (query) => {
     try {
 
-        // const {country} = query
+        const schema = Joi.object({
+            countryCode: Joi.string().required(),
+            stateCode: Joi.string().required()
+        })
 
-        const query = '{\n    "country": "Nigeria",\n    "state": "Lagos"\n}';
+        const {error} = schema.validate(query)
 
-        // const {data} = await axios.post("https://countriesnow.space/api/v0.1/countries/state/cities", {
-        //     data: JSON.stringify({country})
-        // })
+        const isValid = (error === undefined || null)
+        if(!isValid) return false
 
-        return Array.isArray(data.data) ? data.data : null
+        const cityArr = City.getCitiesOfState(query.countryCode, query.stateCode)
+
+        return cityArr.length ? cityArr : false
 
     } catch(err) {
         console.log(err)
@@ -67,7 +78,11 @@ const getCitiesByStates = async (query1) => {
     }
 }
 
+const getLocalRestaurants = async () => {
+
+}
+
 module.exports = {
     getCountriesAndStates,
-    // getCitiesByStates
+    getCitiesByStates
 }
