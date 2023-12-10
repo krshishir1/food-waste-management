@@ -4,7 +4,7 @@ const express = require("express")
 const router = express.Router()
 const Joi = require("joi")
 
-router.get("/", async (req, res) => {
+router.get("/countries", async (req, res) => {
     try {
 
         const data = await countriesApi.getCountriesAndStates()
@@ -34,14 +34,13 @@ router.get("/cities", async (req, res) => {
 router.get("/restaurants", async (req, res) => {
     try {
 
-        const data = await countriesApi.getLocalRestaurants(req.query)
+        const {status, errMsg, results} = await countriesApi.getLocalRestaurants(req.query)
 
-        if(!data) return res.status(400).json({message: "No restaurants found"})
-
-        res.status(200).json({results: data})
+        if(errMsg) return res.status(status).json({errMsg})
+        return res.status(status).json({results})
 
     } catch(err) {
-        res.status(500).json({message: err.message})
+        return res.status(500).json({errMsg: err.message})
     }
 })
 

@@ -77,6 +77,18 @@ const getCitiesByStates = async (query) => {
 const getLocalRestaurants = async (query) => {
     try {
 
+        const schema = Joi.object({
+            lat: Joi.number().required(),
+            lon: Joi.number().required(),
+            limit: Joi.number().optional().max(100),
+            ofs: Joi.number().optional().max(500)
+        })
+
+        const {error} = schema.validate(query)
+
+        const isValid = (error === undefined || null)
+        if(!isValid) throw new Error(error.message)
+
         // console.log(location)
 
         const request = {
@@ -108,12 +120,12 @@ const getLocalRestaurants = async (query) => {
             restaurantList.push({type, score, dist, position, address, poi})
         })
 
-        return restaurantList
+        return {status: 200, results: restaurantList}
 
     } catch(err) {
-        console.log(err)
+        console.log(err.message)
 
-        return err
+        return {status: 500, errMsg: err.message}
     }
 }
 
