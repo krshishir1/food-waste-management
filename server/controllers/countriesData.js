@@ -8,10 +8,6 @@ const Joi = require("joi")
 // Api not working
 // const countriesUrl = `https://countriesnow.space/api/v0.1/countries`
 
-// const restaurantInstance = axios.create({
-//     baseURL: ``
-// })
-
 // axios not used
 // const axiosInstance = axios.create({
 //     baseURL: countriesUrl,
@@ -78,11 +74,51 @@ const getCitiesByStates = async (query) => {
     }
 }
 
-const getLocalRestaurants = async () => {
+const getLocalRestaurants = async (query) => {
+    try {
 
+        // console.log(location)
+
+        const request = {
+            url: `https://api.tomtom.com/search/2/nearbySearch/.json`,
+            params: {
+                key: process.env.TOMTOM_API_KEY,
+                lat: query.lat,
+                lon: query.lon,
+                categorySet: "7315",
+                ofs: query.ofs || 0,
+                limit: query.limit || 100,
+                radius: 10000,
+            }
+        }
+
+        const {data} = await axios(request)
+
+        const restaurantList = []
+
+        data.results.forEach((res) => {
+            let {type, score, dist, position, address, poi} = res;
+
+            const {name, phone, url, timeZones, categories} = poi
+            const {municipality, countrySubdivision, country, countryCode, freeformAddress} = address
+
+            poi = {name, phone, url, timeZones, categories}
+            address = {municipality, countrySubdivision, country, countryCode, freeformAddress}
+
+            restaurantList.push({type, score, dist, position, address, poi})
+        })
+
+        return restaurantList
+
+    } catch(err) {
+        console.log(err)
+
+        return err
+    }
 }
 
 module.exports = {
     getCountriesAndStates,
-    getCitiesByStates
+    getCitiesByStates,
+    getLocalRestaurants
 }

@@ -31,5 +31,19 @@ router.get("/cities", async (req, res) => {
     }
 })
 
+router.get("/restaurants", async (req, res) => {
+    try {
+
+        const data = await countriesApi.getLocalRestaurants(req.query)
+
+        if(!data) return res.status(400).json({message: "No restaurants found"})
+
+        res.status(200).json({results: data})
+
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
 
 module.exports = router
