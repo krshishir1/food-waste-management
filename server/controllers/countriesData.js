@@ -2,16 +2,17 @@ const axios = require("axios")
 
 const countriesUrl = `https://countriesnow.space/api/v0.1/countries`
 
+const axiosInstance = axios.create({
+    baseURL: countriesUrl,
+    headers: {
+        "Content-Type": "application/json"
+    }
+})
+
 const getCountriesAndStates = async () => {
     try {
 
-        const request = {
-            baseURL: countriesUrl,
-            url: "/states",
-            method: "get"
-        }
-
-        const {data} = await axios(request)
+        const {data} = await axiosInstance.get("/states")
 
         if(Array.isArray(data.data)) {
             return data.data
@@ -25,6 +26,16 @@ const getCountriesAndStates = async () => {
         return false
     }
 }
+
+// const getCitiesByStates = async (query) => {
+//     try {
+
+//         const request = 
+
+//     } catch(err) {
+
+//     }
+// }
 
 module.exports = {
     getCountriesAndStates,
