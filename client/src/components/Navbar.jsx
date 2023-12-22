@@ -7,8 +7,8 @@ const Navbar = () => {
             Food Waste Management
           </Link>
           <div className="flex gap-5">
-            <Link to="/" className="text-xl font-medium text-white">
-              Home
+            <Link to="/dashboard" className="text-xl font-medium text-white">
+              Dashboard
             </Link>
             <Link to="/register-organization" className="text-xl font-medium text-white">
               Sign In

@@ -1,27 +1,42 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-import {createBrowserRouter, createRoutesFromElements, RouterProvider, Route} from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+} from "react-router-dom";
 
 // import fetchNearbyPois from "./controllers/fetchNearbyPois";
 // import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
 import OrganizationRegister from "./pages/OrganizationRegister";
+import Dashboard from "./pages/Dashboard";
+import DashboardLayout from "./layouts/DashboardLayout";
+
 import AppLayout from "./layouts/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 
 function App() {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<AppLayout />}>
-        <Route index element={<Home />} />
-        <Route path="/register-organization" element={<OrganizationRegister />} />
-        <Route path="*" element={<PageNotFound />} />
+      <Route>
+        <Route element={<AppLayout />}>
+          <Route index element={<Home />} />
+          <Route
+            path="/register-organization"
+            element={<OrganizationRegister />}
+          />
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+        </Route>
       </Route>
     )
-  )
+  );
 
   // const [nearbyPois, setNearbyPois] = useState([]);
 
@@ -71,7 +86,6 @@ function App() {
   //               ))}
   //             </div>
 
-
   //           </div>
 
   //           <div className="flex flex-row gap-8 w-1/5 items-start">
@@ -101,9 +115,7 @@ function App() {
   //             </div>
 
   //           {/* <div className="flex flex-row gap-10 w-2/5 items-start">
-              
 
-             
   //           </div> */}
   //         </div>
   //       </div>
