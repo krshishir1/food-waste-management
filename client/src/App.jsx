@@ -14,6 +14,7 @@ import {
 import Home from "./pages/Home";
 import OrganizationRegister from "./pages/OrganizationRegister";
 import Dashboard from "./pages/Dashboard";
+import FindRestaurants from "./pages/FindRestaurants";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import AppLayout from "./layouts/AppLayout";
@@ -29,11 +30,12 @@ function App() {
             path="/register-organization"
             element={<OrganizationRegister />}
           />
-          <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="/dashboard/find-restaurants" element={<FindRestaurants />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Route>
     )
   );
