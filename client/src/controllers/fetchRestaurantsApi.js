@@ -47,9 +47,7 @@ const get_restaurants = async function(details) {
             }
         })
 
-        // const {summary, results} = data
-
-        console.log(data)
+        return data.data.results;
 
     } catch(err) {
         console.log(err.message)

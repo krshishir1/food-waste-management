@@ -1,10 +1,14 @@
 import { useContext } from "react";
 import { RestaurantContext } from "../contexts/RestaurantContext";
 
-const RestaurantsList = () => {
+import { useLocation } from "react-router-dom";
 
-  const value =  useContext(RestaurantContext);
-  console.log(`List Restaurants: ${value.name}`)
+const RestaurantsList = () => {
+//   const value =  useContext(RestaurantContext);
+//   console.log(`List Restaurants: ${value.name}`)
+
+  const location = useLocation();
+  const restaurants = location.state.restaurants;
 
   return (
     <div className="bg-[#efefef] flex flex-col items-center justify-center p-6 gap-12 w-full min-h-screen font-['Inter']">
@@ -46,7 +50,3 @@ const RestaurantsList = () => {
 };
 
 export default RestaurantsList;
-
-export const loadRestaurants = () => {
-
-}

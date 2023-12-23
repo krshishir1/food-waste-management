@@ -1,12 +1,16 @@
 import { createContext, useState } from "react";
 import searchApi from "../controllers/fetchRestaurantsApi";
+import {useNavigate} from "react-router-dom";
 
 export const RestaurantContext = createContext();
 
 const RestaurantContextProvider = ({ children }) => {
+  const navigate = useNavigate();  
+
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [restaurants, setRestaurants] = useState(null)
 
   const [currentCountryCode, setCurrentCountryCode] = useState("");
   const [currentStateCode, setCurrentStateCode] = useState("");
@@ -59,7 +63,7 @@ const RestaurantContextProvider = ({ children }) => {
     }
   };
 
-  const submitRestaurantForm = function () {
+  const submitRestaurantForm = async function () {
     try {
       let locationDetails = {};
 
@@ -111,14 +115,18 @@ const RestaurantContextProvider = ({ children }) => {
         radius,
       };
 
-      console.log(finalObj);
-      getLocalRestaurants(finalObj);
+      await navigateRestaurants(finalObj);
 
-      // {latitude, longtitude, radius}
     } catch (err) {
       console.log(err);
     }
   };
+
+  const navigateRestaurants = async function(details) {
+    const results = await searchApi.get_restaurants(details)
+    
+    navigate("/dashboard/restaurants", {state: {restaurants: results}})
+  }
 
   const value = {
     countries,
