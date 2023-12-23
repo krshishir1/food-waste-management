@@ -15,8 +15,11 @@ import Home from "./pages/Home";
 import OrganizationRegister from "./pages/OrganizationRegister";
 import Dashboard from "./pages/Dashboard";
 import FindRestaurants from "./pages/FindRestaurants";
-import DashboardLayout from "./layouts/DashboardLayout";
+import RestaurantsList from "./pages/RestaurantsList";
 
+import RestaurantContextProvider from "./contexts/RestaurantContext";
+
+import DashboardLayout from "./layouts/DashboardLayout";
 import AppLayout from "./layouts/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 
@@ -31,9 +34,13 @@ function App() {
             element={<OrganizationRegister />}
           />
         </Route>
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="/dashboard/find-restaurants" element={<FindRestaurants />} />
+          <Route path="/dashboard/restaurants" 
+          element={<RestaurantContextProvider><RestaurantsList /></RestaurantContextProvider>} />
+          <Route path="/dashboard/find-restaurants" element={<RestaurantContextProvider>
+            <FindRestaurants />
+          </RestaurantContextProvider>} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>

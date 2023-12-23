@@ -1,19 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { RestaurantContext } from "../contexts/RestaurantContext";
 import searchApi from "../controllers/fetchRestaurantsApi";
 
 const FindRestaurants = () => {
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-
-  const [currentCountryCode, setCurrentCountryCode] = useState("");
-  const [currentStateCode, setCurrentStateCode] = useState("");
-
-  const [radius, setRadius] = useState(10);
-
-  const [currentCity, setCurrentCity] = useState("");
-
   const [loading, setLoading] = useState(true);
+
+  const {
+    countries,
+    states,
+    cities,
+    currentCountryCode,
+    currentStateCode,
+    radius,
+    currentCity,
+    setCountries,
+    setCurrentCountryCode,
+    setCurrentStateCode,
+    setCurrentCity,
+    setRadius,
+    getStates,
+    getCities,
+    submitRestaurantForm
+  } = useContext(RestaurantContext);
 
   useEffect(() => {
     async function getCountries() {
@@ -24,127 +32,23 @@ const FindRestaurants = () => {
           ...country,
         }))
       );
+
       setCurrentCountryCode(results[0].isocode);
       setLoading(false);
     }
-
     getCountries();
   }, []);
 
   useEffect(() => {
-    async function getStates() {
-      const results = await searchApi.get_countries();
-
-      const defaultCountry = results.filter(
-        (country) => country.isocode === currentCountryCode
-      )[0];
-
-      if (defaultCountry.states.length) {
-        setStates(defaultCountry.states);
-        setCurrentStateCode(defaultCountry.states[0].isoCode);
-      } else {
-        setStates([]);
-        setCurrentStateCode("");
-      }
-    }
     console.log(`Country changed: ${currentCountryCode}`);
     getStates();
   }, [currentCountryCode]);
 
   useEffect(() => {
-    async function getCities() {
-      if (!currentStateCode || !currentCountryCode) {
-        setCurrentCity("");
-        setCities([]);
-        return;
-      };
-
-      const results = await searchApi.get_cities(
-        currentCountryCode,
-        currentStateCode
-      );
-
-      const pResults = results.map((city) => {
-        delete city.stateCode;
-        delete city.countryCode;
-
-        return city;
-      });
-
-      if (pResults.length) {
-        setCurrentCity(pResults[0].name);
-        setCities(pResults);
-      } else {
-        setCurrentCity("");
-        setCities([]);
-      }
-    }
-
     console.log(`State changed: ${currentStateCode}`);
-
     getCities();
   }, [currentStateCode]);
 
-  const changeCountry = (e) => {
-    setCurrentCountryCode(e.target.value);
-  };
-
-  const submitForm = () => {
-    try {
-      let locationDetails = {}
-
-      const currentCityDesc = cities.filter(
-        (city) => city.name === currentCity
-      )[0];
-
-      let cityExists = currentCityDesc ? true : false;
-      let stateExists = currentStateCode !== "" || undefined;
-      let countryExists = currentCountryCode !== "" || undefined;  
-
-      if (cityExists) {
-        locationDetails = {
-            latitude: currentCityDesc.latitude,
-            longitude: currentCityDesc.longitude,
-            name: currentCityDesc.name,
-            type: "city"
-        }
-      }
-
-      if (stateExists && (Object.keys(locationDetails).length === 0)) {
-        const currentState = states.filter(state => state.isoCode === currentStateCode)[0];
-        locationDetails = {
-            latitude: currentState.latitude,
-            longitude: currentState.longitude,
-            name: currentState.name,
-            isocode: currentState.isoCode,
-            type: "state"
-        }
-      }
-
-      if (countryExists && (Object.keys(locationDetails).length === 0)) {
-        const currentCountry = countries.filter(country => country.isocode === currentCountryCode)[0];
-        locationDetails = {
-            latitude: currentCountry.latitude,
-            longitude: currentCountry.longitude,
-            name: currentCountry.name,
-            isocode: currentCountry.isocode,
-            type: "country"
-        }
-      } 
-
-      const finalObj = {
-        ...locationDetails,
-        radius
-      }
-
-      console.log(finalObj)
-
-      
-      // {latitude, longtitude, radius}
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return loading ? (
     <h3>Loading...</h3>
@@ -162,7 +66,7 @@ const FindRestaurants = () => {
             </label>
             <div>
               <select
-                onChange={(e) => changeCountry(e)}
+                onChange={(e) => setCurrentCountryCode(e.target.value)}
                 className="block w-full p-2 rounded-md bg-white border border-[#3d3a3a] text-sm font-medium text-[#616161] outline-none"
               >
                 {countries.map((country) => (
@@ -236,7 +140,7 @@ const FindRestaurants = () => {
         </div>
 
         <button
-          onClick={submitForm}
+          onClick={submitRestaurantForm}
           className="w-full px-4 py-2 font-bold text-white bg-[#007fff] rounded hover:bg-blue-700"
         >
           FIND

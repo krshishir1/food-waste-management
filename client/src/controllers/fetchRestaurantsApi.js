@@ -34,7 +34,30 @@ const get_cities = async function(countryCode, stateCode) {
     }
 }
 
+const get_restaurants = async function(details) {
+    try {
+
+        const {latitude, longitude, radius} = details
+
+        const {data} = await axiosConfig.get("/restaurants", {
+            params: {
+                lat: Number(latitude),
+                lon: Number(longitude),
+                radius: radius * 1000
+            }
+        })
+
+        // const {summary, results} = data
+
+        console.log(data)
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+ 
 export default {
     get_countries,
-    get_cities
+    get_cities,
+    get_restaurants
 }
