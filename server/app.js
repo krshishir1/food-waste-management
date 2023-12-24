@@ -16,6 +16,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/auth/organization", organizationRouter)
 app.use("/api/search", countriesRouter)
 
+app.get("/", (req, res) => {
+    console.log("Everything is working alright")
+})
+
 mongoose.connect(process.env.DATABASE_URI)
     .then(() => app.listen(process.env.DEVELOPMENT_PORT, () => {
         console.log(`Server up and running`)

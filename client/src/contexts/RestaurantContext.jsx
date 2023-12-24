@@ -124,6 +124,8 @@ const RestaurantContextProvider = ({ children }) => {
 
   const navigateRestaurants = async function(details) {
     const results = await searchApi.get_restaurants(details)
+
+    console.log(results, "navigation")
     
     navigate("/dashboard/restaurants", {state: {restaurants: results}})
   }

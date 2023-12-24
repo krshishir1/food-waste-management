@@ -41,9 +41,12 @@ router.get("/", async (req, res) => {
 
         const {email} = req.query
 
-        const validEmailSchema = Joi.string().email()
+        const schema = Joi.string().email()
         
-        await validEmailSchema.validateAsync(email)
+        const {error} = schema.validate(email)
+        const isValid = (error === undefined)
+        
+        if(!isValid) throw new Error(error.message)
 
         const result = await Organization.findOne({
             orgEmail: email

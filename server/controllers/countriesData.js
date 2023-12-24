@@ -16,6 +16,8 @@ const Joi = require("joi")
 //     }
 // })
 
+
+// /api/search/countries
 const getCountriesAndStates = async () => {
     try {
 
@@ -50,6 +52,7 @@ const getCountriesAndStates = async () => {
     }
 }
 
+// /api/search/cities?countryCode=IN&stateCode=MH
 const getCitiesByStates = async (query) => {
     try {
 
@@ -74,8 +77,11 @@ const getCitiesByStates = async (query) => {
     }
 }
 
+// api/search/restaurants?lat=18.5204&lon=73.8567&limit=100&ofs=0&radius=10000
 const getLocalRestaurants = async (query) => {
     try {
+
+        console.log(query)
 
         const schema = Joi.object({
             lat: Joi.number().required(),
