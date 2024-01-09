@@ -26,6 +26,10 @@ const organizationSchema = new Schema({
     orgAddress: {
         type: String,
         required: [true, "Organization address is required."],
+    },
+    savedRestaurants: {
+        type: Array,
+        default: []
     }
 })
 

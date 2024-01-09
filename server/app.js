@@ -7,6 +7,7 @@ const cors = require("cors")
 
 const organizationRouter = require("./routes/registerOrganization")
 const countriesRouter = require("./routes/countriesApi")
+const organization = require("./routes/organization")
 
 app.use(cors())
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use("/auth/organization", organizationRouter)
 app.use("/api/search", countriesRouter)
+app.use("/api", organization)
 
 app.get("/", (req, res) => {
     res.send("Hello world")

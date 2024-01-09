@@ -1,6 +1,6 @@
 const ContactModal = ({data, functions}) => {
-  const { phone } = data;
-//   console.log(data)
+  const { restaurant } = data;
+  console.log("modal")
   return (
     <>
       <div
@@ -12,9 +12,10 @@ const ContactModal = ({data, functions}) => {
             className="h-1/5 w-1/3 bg-white rounded p-5"
           >
             <div className="flex h-full flex-col justify-between">
-              <h2>Phone no. {phone}</h2>
+              <h2>Phone no. {restaurant.poi.phone}</h2>
               <div className="flex gap-4 self-end">
-                <button className="bg-blue-500 text-white text-sm p-3 py-1 rounded">
+                <button onClick={() => functions.save(restaurant)}
+                className="bg-blue-500 text-white text-sm p-3 py-1 rounded">
                   Save
                 </button>
                 <button onClick={() => {

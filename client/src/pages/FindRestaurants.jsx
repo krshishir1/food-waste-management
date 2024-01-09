@@ -27,7 +27,9 @@ const FindRestaurants = () => {
     async function getCountries() {
       if (currentCountryCode !== "") {
         console.log("Country code already set", currentCountryCode);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500)
         return;
       }
 
@@ -39,7 +41,10 @@ const FindRestaurants = () => {
         }))
       );
       setCurrentCountryCode(results[0].isocode);
-      setLoading(false);
+      
+      setTimeout(() => {
+        setLoading(false);
+      }, 500)
     }
     getCountries();
   }, []);

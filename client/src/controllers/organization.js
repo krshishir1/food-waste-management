@@ -70,3 +70,51 @@ export const getOrganizationDetails = async function (orgEmail) {
     return [status, data.error];
   }
 };
+
+export const saveRestaurant = async function (orgEmail, restaurant) {
+  try {
+    const request = {
+      baseURL: SERVER_URL,
+      url: `/api/save-restaurant`,
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        orgEmail,
+        restaurant
+      }
+    }
+
+    const { data, status } = await axios(request);
+    return [status]
+  } catch(error) {
+    console.log(error);
+    const { data, status } = error.response;
+    return [status, data.message];
+  }
+}
+
+export const deleteRestaurant = async function (orgEmail, restaurant) {
+  try {
+    const request = {
+      baseURL: SERVER_URL,
+      url: `/api/delete-restaurant`,
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        orgEmail,
+        restaurant
+      }
+    }
+
+    const { data, status } = await axios(request);
+    return [status]
+  } catch(error) {
+    console.log(error);
+    const { data, status } = error.response;
+    return [status, data.message];
+  }
+}

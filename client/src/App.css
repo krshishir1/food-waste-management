@@ -2,3 +2,11 @@
   font-family: "Poppins", sans-serif;
   font-family: "Roboto", sans-serif;
 }
+
+.restaurant-btn {
+  display: none;
+}
+
+.restaurant-card:hover .restaurant-btn {
+  display: block;
+}

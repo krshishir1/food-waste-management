@@ -4,15 +4,19 @@ import { RestaurantContext } from "../contexts/RestaurantContext";
 import { useLocation, Link } from "react-router-dom";
 import ContactModal from "../components/ContactModal";
 
+import { saveRestaurant } from "../controllers/organization";
+import { DashboardContext } from "../contexts/DashboardContext";
+
 const RestaurantsList = () => {
   //   const value =  useContext(RestaurantContext);
   //   console.log(`List Restaurants: ${value.name}`)
   const location = useLocation();
+  // const {orgDetails} = useContext(DashboardContext);
 
-  const restaurantsRef = useRef(location.state.restaurants)
+  const restaurantsRef = useRef(location.state.restaurants);
 
   const [restaurants, setRestaurantsList] = useState(
-    location.state.restaurants
+    restaurantsRef.current
   );
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,14 +25,13 @@ const RestaurantsList = () => {
 
   const noRestaurants = restaurants.length === 0 || !restaurants;
 
-  const openModal = (phone) => {
-    console.log(phone);
+  const openModal = (restaurant) => {
     setModalOpen((modalOpen) => !modalOpen);
-    setModalData({ phone });
+    setModalData({ restaurant });
   };
 
   const filterChange = (criteria) => {
-    const arr = [...restaurantsRef.current]
+    const arr = [...restaurantsRef.current];
     if (!arr.length) return;
 
     console.log(criteria);
@@ -52,9 +55,9 @@ const RestaurantsList = () => {
             Filter By
           </label>
           <select
-          value={filterCriteria}
+            value={filterCriteria}
             onChange={(e) => filterChange(e.target.value)}
-            className="w-full basis-1/5 p-2 rounded-md bg-white border border-gray-300 text-sm font-medium outline-none"
+            className="p-2 rounded-md bg-white border border-gray-300 text-sm font-medium outline-none"
           >
             <option value="relevance">Most Relevant</option>
             <option value="contact_address">Contact Address</option>
@@ -65,15 +68,29 @@ const RestaurantsList = () => {
     );
   };
 
+  console.log("restaurant")
+
+  const save = async (restaurant) => {
+    const orgEmail = localStorage.getItem("email");
+    const response = await saveRestaurant(orgEmail, restaurant);
+
+    console.log(response)
+    if(response[0] === 201) {
+      alert(`Restaurant ${restaurant.poi.name} saved successfully`)
+    } else if (response[0] === 500) {
+      alert(response[1])
+     }
+  }
+
   return (
-    <div className="bg-[#efefef] flex flex-col items-center justify-center p-6 gap-12 w-full min-h-screen overflow-y-hidden">
+    <div className="bg-[#efefef] flex flex-col items-center justify-center p-6 gap-12 w-full min-h-screen">
       {modalOpen && (
         <ContactModal
           data={modalData}
-          functions={{ setModalData, setModalOpen }}
+          functions={{ setModalData, setModalOpen, save }}
         />
       )}
-      <FilterRestaurants />
+      {!noRestaurants && <FilterRestaurants />}
       {noRestaurants ? (
         <h2 className="text-lg">No restaurants found</h2>
       ) : (
@@ -84,7 +101,7 @@ const RestaurantsList = () => {
           return (
             <div
               key={`res-${index + 1}`}
-              className="bg-white flex flex-col md:flex-row gap-6 md:gap-6 w-full max-w-4xl h-auto md:h-40 items-center py-8 md:py-2 px-12 rounded-lg shadow"
+              className="bg-white flex flex-col md:flex-row gap-6 md:gap-6 w-full max-w-4xl h-auto md:h-40 items-center py-8 md:py-2 px-12 rounded-lg shadow restaurant-card"
             >
               <div className="flex flex-col gap-2 items-center md:items-start basis-2/5">
                 <div className="text-xl font-bold text-center md:text-left">
@@ -99,7 +116,7 @@ const RestaurantsList = () => {
                       {category}
                     </div>
                   ))}
-                  {restaurant.score}
+                  {/* {restaurant.score} */}
                 </div>
                 {url && (
                   <div className="mt-2">
@@ -120,7 +137,7 @@ const RestaurantsList = () => {
                   <div>
                     {phone && (
                       <p
-                        onClick={() => openModal(phone)}
+                        onClick={() => openModal(restaurant)}
                         className="text-base underline text-[#007fff] cursor-pointer"
                       >
                         Contact
@@ -139,6 +156,14 @@ const RestaurantsList = () => {
                   </div>
                   <div className="text-xs text-center md:text-right mt-1">
                     {freeformAddress}
+                  </div>
+                  <div className="flex justify-end">
+                    <button onClick={() => save(restaurant)}
+                      className="text-white text-sm py-0.5 rounded font-bold bg-blue-500 
+                  hover:bg-blue-700 w-1/6 hidden restaurant-btn"
+                    >
+                      Save
+                    </button>
                   </div>
                 </div>
               </div>
