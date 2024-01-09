@@ -20,11 +20,17 @@ const FindRestaurants = () => {
     setRadius,
     getStates,
     getCities,
-    submitRestaurantForm
+    submitRestaurantForm,
   } = useContext(RestaurantContext);
 
   useEffect(() => {
     async function getCountries() {
+      if (currentCountryCode !== "") {
+        console.log("Country code already set", currentCountryCode);
+        setLoading(false);
+        return;
+      }
+
       const results = await searchApi.get_countries();
 
       setCountries(
@@ -32,7 +38,6 @@ const FindRestaurants = () => {
           ...country,
         }))
       );
-
       setCurrentCountryCode(results[0].isocode);
       setLoading(false);
     }
@@ -49,6 +54,7 @@ const FindRestaurants = () => {
     getCities();
   }, [currentStateCode]);
 
+//   console.log(currentCountryCode);
 
   return loading ? (
     <h3>Loading...</h3>
@@ -73,7 +79,7 @@ const FindRestaurants = () => {
                   <option
                     key={country.isocode}
                     value={country.isocode}
-                    defaultValue={country.isocode === currentCountryCode}
+                    selected={country.isocode === currentCountryCode}
                   >
                     {country.name}
                   </option>

@@ -2,6 +2,9 @@ import { createContext, useState } from "react";
 import searchApi from "../controllers/fetchRestaurantsApi";
 import {useNavigate} from "react-router-dom";
 
+import FindRestaurants from "../pages/FindRestaurants";
+import RestaurantsList from "../pages/RestaurantsList";
+
 export const RestaurantContext = createContext();
 
 const RestaurantContextProvider = ({ children }) => {

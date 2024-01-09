@@ -6,6 +6,7 @@ import {
   createRoutesFromElements,
   RouterProvider,
   Route,
+  Navigate,
 } from "react-router-dom";
 
 // import fetchNearbyPois from "./controllers/fetchNearbyPois";
@@ -16,14 +17,20 @@ import OrganizationRegister from "./pages/OrganizationRegister";
 import Dashboard from "./pages/Dashboard";
 import FindRestaurants from "./pages/FindRestaurants";
 import RestaurantsList from "./pages/RestaurantsList";
+import OrganizationSignin from "./pages/OrganizationSignIn";
+import UserProfile from "./pages/UserProfile";
 
 import RestaurantContextProvider from "./contexts/RestaurantContext";
+import DashboardContextProvider from "./contexts/DashboardContext";
 
 import DashboardLayout from "./layouts/DashboardLayout";
 import AppLayout from "./layouts/AppLayout";
 import PageNotFound from "./pages/PageNotFound";
 
 function App() {
+  const currentEmail = localStorage.getItem("email");
+  const emailExists = currentEmail !== null;
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
@@ -33,14 +40,26 @@ function App() {
             path="/register-organization"
             element={<OrganizationRegister />}
           />
+          <Route path="/sign-in" element={<OrganizationSignin />} />
         </Route>
-        <Route path="dashboard" element={<DashboardLayout />}>
+        <Route
+          path="dashboard"
+          element={
+            <DashboardContextProvider orgEmail={currentEmail}>
+              <DashboardLayout />
+            </DashboardContextProvider>
+          }
+        >
           <Route index element={<Dashboard />} />
-          <Route path="/dashboard/restaurants" 
-          element={<RestaurantContextProvider><RestaurantsList /></RestaurantContextProvider>} />
-          <Route path="/dashboard/find-restaurants" element={<RestaurantContextProvider>
-            <FindRestaurants />
-          </RestaurantContextProvider>} />
+          <Route path="/dashboard/restaurants" element={<RestaurantsList />} />
+          <Route
+            path="/dashboard/find-restaurants"
+            element={<FindRestaurants />}
+          />
+          <Route
+            path="/dashboard/profile"
+            element={<UserProfile />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>
