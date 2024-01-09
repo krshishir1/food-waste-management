@@ -17,6 +17,7 @@ app.use("/auth/organization", organizationRouter)
 app.use("/api/search", countriesRouter)
 
 app.get("/", (req, res) => {
+    res.send("Hello world")
     console.log("Everything is working alright")
 })
 

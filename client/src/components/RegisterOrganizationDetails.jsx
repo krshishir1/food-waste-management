@@ -41,7 +41,8 @@ const RegisterOrganizationDetails = () => {
     else if (status === 201) {
       setErrors([]);
       setResponseMessage(data.message)
-      navigate("/")
+      localStorage.setItem("email", orgEmail);
+      navigate("/dashboard")
     }
 
   };
