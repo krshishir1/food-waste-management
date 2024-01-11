@@ -75,7 +75,6 @@ const Dashboard = () => {
                       <div>
                         {phone && (
                           <p
-                            onClick={() => openModal(restau)}
                             className="text-xs underline text-[#007fff] cursor-pointer"
                           >
                             {phone}
