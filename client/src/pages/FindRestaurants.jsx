@@ -29,7 +29,7 @@ const FindRestaurants = () => {
         console.log("Country code already set", currentCountryCode);
         setTimeout(() => {
           setLoading(false);
-        }, 500)
+        }, 200)
         return;
       }
 
@@ -41,10 +41,10 @@ const FindRestaurants = () => {
         }))
       );
       setCurrentCountryCode(results[0].isocode);
-      
+
       setTimeout(() => {
         setLoading(false);
-      }, 500)
+      }, 200)
     }
     getCountries();
   }, []);
@@ -79,12 +79,12 @@ const FindRestaurants = () => {
               <select
                 onChange={(e) => setCurrentCountryCode(e.target.value)}
                 className="block w-full p-2 rounded-md bg-white border border-[#3d3a3a] text-sm font-medium text-[#616161] outline-none"
+                value={currentCountryCode}
               >
                 {countries.map((country) => (
                   <option
                     key={country.isocode}
                     value={country.isocode}
-                    selected={country.isocode === currentCountryCode}
                   >
                     {country.name}
                   </option>

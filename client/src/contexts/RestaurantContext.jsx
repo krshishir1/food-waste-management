@@ -26,6 +26,8 @@ const RestaurantContextProvider = ({ children }) => {
       (country) => country.isocode === currentCountryCode
     )[0];
 
+    if(!defaultCountry) return;
+
     if (defaultCountry.states.length) {
       setStates(defaultCountry.states);
       setCurrentStateCode(defaultCountry.states[0].isoCode);
